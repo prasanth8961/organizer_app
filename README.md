@@ -1,5 +1,5 @@
 
-## $${\color{aqua}ORGANIZER - APP}$$
+## ORGANIZER APP
 
 ### Overview 
   - This app is a part of the **Event management system** . Organizer app plays an important role in event management software. Which helps to create and manage events.
