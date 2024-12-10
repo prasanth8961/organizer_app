@@ -23,37 +23,45 @@
 - **Provider**: Simplifies state management across the application.
 
 ---
+## APP OUTPUT SCREENS
 
-## App View
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; height:100vh; width:100vw">
 
-### Home Screen and Search Screen:
-<div style="display: flex; justify-content: space-between; padding-top:10px">
-  <img src="assets/img_samples/home_screen.jpg" alt="Home Screen" width="48%" />
-  <img src="assets/img_samples/audio_visualization.jpg" alt="search screen" width="48%" />
-</div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <img src="assets/organizer-app-img/home-shimmer.jpg" alt="Sample Output 1" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+    <img src="assets/organizer-app-img/home.jpg" alt="Sample Output 2" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+  </div>
 
-### **Event creation and event status Screen**:
-<div style="display: flex; justify-content: space-between; padding-top:10px">
-  <img src="assets/img_samples/home_screen.jpg" alt="event creation img" width="48%" />
-  <img src="assets/img_samples/audio_visualization.jpg" alt="event search after" width="48%" />
-</div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <img src="assets/organizer-app-img/search-before.jpg" alt="Sample Output 3" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+    <img src="assets/organizer-app-img/search-after.jpg" alt="Sample Output 4" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+  </div>
 
-### **Event Status [rejected and aproved] Screen**:
-<div style="display: flex; justify-content: space-between; padding-top:10px">
-  <img src="assets/img_samples/home_screen.jpg" alt="event creation img" width="48%" />
-  <img src="assets/img_samples/audio_visualization.jpg" alt="event search after" width="48%" />
-</div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <img src="assets/organizer-app-img/event-create.jpg" alt="Sample Output 5" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+    <img src="assets/organizer-app-img/start-event-creation.jpg" alt="Sample Output 6" style="width:150px; height: auto; border: 1px solid #ccc;border-radius: 5px;">
+  </div>
 
-### **Event detail and event video player Screen**:
-<div style="display: flex; justify-content: space-between; padding-top:10px">
-  <img src="assets/img_samples/home_screen.jpg" alt="event creation img" width="48%" />
-  <img src="assets/img_samples/audio_visualization.jpg" alt="event search after" width="48%" />
-</div>
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <img src="assets/organizer-app-img/event-date-pick.jpg" alt="Sample Output 7" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+    <img src="assets/organizer-app-img/event-img-pick.jpg" alt="Sample Output 8" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+  </div>
 
-### Settings Menu & User profile:
-<div style="display: flex; justify-content: space-between;">
-  <img src="assets/img_samples/settings_menu.jpg" alt="Settings Menu" width="48%" />
-  <img src="assets/img_samples/data_logging.jpg" alt="Data Logging" width="48%" />
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <img src="assets/organizer-app-img/event-progress.jpg" alt="Sample Output 9" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+    <img src="assets/organizer-app-img/event-status.jpg" alt="Sample Output 10" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <img src="assets/organizer-app-img/event-detail.jpg" alt="Sample Output 11" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+    <img src="assets/organizer-app-img/event-detail-2.jpg" alt="Sample Output 12" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 10px;">
+    <img src="assets/organizer-app-img/event-video.jpg" alt="Sample Output 13" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+    <img src="assets/organizer-app-img/profile.jpg" alt="Sample Output 14" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
+  </div>
+
 </div>
 
 ---
