@@ -25,45 +25,30 @@
 ---
 ## APP OUTPUT SCREENS
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; height:100vh; width:100vw">
-
-  <div style="display: flex; flex-direction: column; gap: 10px;">
-    <img src="assets/organizer-app-img/home-shimmer.jpg" alt="Sample Output 1" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-    <img src="assets/organizer-app-img/home.jpg" alt="Sample Output 2" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-  </div>
-
-  <div style="display: flex; flex-direction: column; gap: 10px;">
-    <img src="assets/organizer-app-img/search-before.jpg" alt="Sample Output 3" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-    <img src="assets/organizer-app-img/search-after.jpg" alt="Sample Output 4" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-  </div>
-
-  <div style="display: flex; flex-direction: column; gap: 10px;">
-    <img src="assets/organizer-app-img/event-create.jpg" alt="Sample Output 5" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-    <img src="assets/organizer-app-img/start-event-creation.jpg" alt="Sample Output 6" style="width:150px; height: auto; border: 1px solid #ccc;border-radius: 5px;">
-  </div>
-
-  <div style="display: flex; flex-direction: column; gap: 10px;">
-    <img src="assets/organizer-app-img/event-date-pick.jpg" alt="Sample Output 7" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-    <img src="assets/organizer-app-img/event-img-pick.jpg" alt="Sample Output 8" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-  </div>
-
-  <div style="display: flex; flex-direction: column; gap: 10px;">
-    <img src="assets/organizer-app-img/event-progress.jpg" alt="Sample Output 9" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-    <img src="assets/organizer-app-img/event-status.jpg" alt="Sample Output 10" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-  </div>
-
-  <div style="display: flex; flex-direction: column; gap: 10px;">
-    <img src="assets/organizer-app-img/event-detail.jpg" alt="Sample Output 11" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-    <img src="assets/organizer-app-img/event-detail-2.jpg" alt="Sample Output 12" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-  </div>
-
-  <div style="display: flex; flex-direction: column; gap: 10px;">
-    <img src="assets/organizer-app-img/event-video.jpg" alt="Sample Output 13" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-    <img src="assets/organizer-app-img/profile.jpg" alt="Sample Output 14" style="width: 150px; height: auto; border: 1px solid #ccc; border-radius: 5px;">
-  </div>
-
-</div>
-
+<table>
+  <tr>
+    <td><img src="assets/organizer-app-img/home-shimmer.jpg" alt="Sample 1" width="150"></td>
+    <td><img src="assets/organizer-app-img/home.jpg" alt="Sample 2" width="150"></td>
+    <td><img src="assets/organizer-app-img/search-before.jpg" alt="Sample 3" width="150"></td>
+    <td><img src="assets/organizer-app-img/search-after.jpg" alt="Sample 4" width="150"></td>
+  </tr>
+  <tr>
+    <td><img src="assets/organizer-app-img/event-create.jpg" alt="Sample 5" width="150"></td>
+    <td><img src="assets/organizer-app-img/start-event-creation.jpg" alt="Sample 6" width="150"></td>
+    <td><img src="assets/organizer-app-img/event-date-pick.jpg" alt="Sample 7" width="150"></td>
+    <td><img src="assets/organizer-app-img/event-img-pick.jpg" alt="Sample 8" width="150"></td>
+  </tr>
+  <tr>
+    <td><img src="assets/organizer-app-img/event-progress.jpg" alt="Sample 9" width="150"></td>
+    <td><img src="assets/organizer-app-img/event-status.jpg" alt="Sample 10" width="150"></td>
+    <td><img src="assets/organizer-app-img/event-detail.jpg" alt="Sample 11" width="150"></td>
+    <td><img src="assets/organizer-app-img/event-detail-2.jpg" alt="Sample 12" width="150"></td>
+  </tr>
+  <tr>
+    <td><img src="assets/organizer-app-img/event-video.jpg" alt="Sample 13" width="150"></td>
+    <td><img src="assets/organizer-app-img/profile.jpg" alt="Sample 14" width="150"></td>
+  </tr>
+</table>
 ---
 
 
