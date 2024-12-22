@@ -59,19 +59,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildSummaryCard(
-                              "Pending Events", "0", Colors.orange),
-                          _buildSummaryCard(
-                              "Completed Events", "0", Colors.green),
+                          _buildSummaryCard("Pending Events", "0",
+                              const Color.fromARGB(255, 136, 127, 114)),
+                          _buildSummaryCard("Completed Events", "0",
+                              const Color.fromARGB(255, 124, 155, 125)),
                         ],
                       ),
                       const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildSummaryCard("Booked Count", "0", Colors.purple),
-                          _buildSummaryCard(
-                              "Active Events", "0", Colors.blueAccent),
+                          _buildSummaryCard("Booked Count", "0",
+                              const Color.fromARGB(255, 147, 121, 152)),
+                          _buildSummaryCard("Active Events", "0",
+                              const Color.fromARGB(255, 111, 121, 139)),
                         ],
                       ),
                     ],
@@ -85,23 +86,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           _buildSummaryCard(
                               "Pending Events",
                               "${dashboardData["pendingEventsCount"]}",
-                              Colors.orange),
+                              const Color.fromARGB(255, 139, 129, 116)),
                           _buildSummaryCard(
                               "Completed Events",
                               "${dashboardData["completedEventsCount"]}",
-                              Colors.green),
+                              const Color.fromARGB(255, 123, 152, 124)),
                         ],
                       ),
                       const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _buildSummaryCard("Booked Count",
-                              "${dashboardData["bookedCount"]}", Colors.purple),
+                          _buildSummaryCard(
+                              "Booked Count",
+                              "${dashboardData["bookedCount"]}",
+                              const Color.fromARGB(255, 93, 72, 97)),
                           _buildSummaryCard(
                               "Active Events",
                               "${dashboardData["activeEventsCount"]}",
-                              Colors.blueAccent),
+                              const Color.fromARGB(255, 91, 101, 119)),
                         ],
                       ),
                     ],

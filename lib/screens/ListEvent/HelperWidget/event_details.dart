@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:intl/intl.dart';
 import 'package:organizer_app/Helper/api_service.dart';
 import 'package:organizer_app/Model/event_data_model.dart';
 import 'package:organizer_app/Screens/ListEvent/HelperWidget/video_thumnail.dart';
@@ -26,6 +27,10 @@ class EventDetailsScreen extends StatelessWidget {
         default:
           return Colors.grey;
       }
+    }
+
+    String formateDate(DateTime date) {
+      return DateFormat("MMM dd, yyyy").format(date);
     }
 
     void showImagePopup(BuildContext context, String imageUrl) {
@@ -112,28 +117,36 @@ class EventDetailsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                'Location: ${mainEvent.location}',
-                style: const TextStyle(fontSize: 16, color: Colors.black54),
-              ),
-              Text(
-                'Category: ${mainEvent.category}',
-                style: const TextStyle(fontSize: 16, color: Colors.black54),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Description: ${mainEvent.description}',
-                style: const TextStyle(fontSize: 14, color: Colors.black87),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Registration Period: ${mainEvent.regStart.toString()} to ${mainEvent.regEnd.toString()}',
-                style: const TextStyle(fontSize: 14, color: Colors.black54),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Tags: ${mainEvent.tags.join(', ')}',
-                style: const TextStyle(fontSize: 14, color: Colors.black54),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GridView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // 2 columns
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio:
+                          3, // Adjust aspect ratio for better alignment
+                    ),
+                    children: [
+                      _buildInfoTile(
+                          Icons.location_on, 'Location', mainEvent.location),
+                      _buildInfoTile(
+                          Icons.category, 'Category', mainEvent.category),
+                      _buildInfoTile(Icons.description, 'Description',
+                          mainEvent.description,
+                          isMultiLine: true),
+                      _buildInfoTile(
+                          Icons.calendar_today,
+                          'Registration Period',
+                          '${formateDate(mainEvent.regStart)} to ${formateDate(mainEvent.regEnd)}'),
+                      _buildInfoTile(Icons.tag, 'Tags', mainEvent.tags),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               const Text(
@@ -250,6 +263,46 @@ class EventDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildInfoTile(IconData icon, String title, String value,
+      {bool isMultiLine = false}) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 20, color: Colors.blueAccent),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              if (isMultiLine)
+                Text(
+                  value,
+                  style: const TextStyle(fontSize: 12, color: Colors.black54),
+                  overflow: TextOverflow.clip, // Allow multiline text
+                )
+              else
+                Text(
+                  value,
+                  style: const TextStyle(fontSize: 12, color: Colors.black54),
+                  overflow:
+                      TextOverflow.ellipsis, // Truncate text with ellipsis
+                  maxLines: 1,
+                ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

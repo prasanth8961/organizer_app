@@ -21,7 +21,7 @@ class EventProvider extends ChangeNotifier {
   List<EventDataModel> get allEvents => _allEvents;
   Map<String, dynamic> get dashboardData => _dashboardData;
 
-  Future<String> submitEvent(
+  Future<Map<String, dynamic>> submitEvent(
     File mainImage,
     List<File> coverImages,
     List<List<File>> subEventListImages,
@@ -109,12 +109,21 @@ class EventProvider extends ChangeNotifier {
       var parsedResponse = jsonDecode(responseData);
 
       if (response.statusCode == 200) {
-        return parsedResponse['message'];
+        return {
+          'status': parsedResponse['status'],
+          'message': parsedResponse['message'],
+        };
       } else {
-        return "${parsedResponse['message']}";
+        return {
+          'status': parsedResponse['status'],
+          'message': parsedResponse['message'] ?? "unknown error occured.",
+        };
       }
     } catch (e) {
-      return 'internal server error';
+      return {
+        'status': false,
+        'message': 'Internal server error',
+      };
     }
   }
 
@@ -171,7 +180,6 @@ class EventProvider extends ChangeNotifier {
   Future<void> getPendingEvents() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("accessToken")!;
-
     try {
       final response = await http.get(
         Uri.parse("$baseUrl${Config.getPendingEvents}"),

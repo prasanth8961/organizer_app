@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:organizer_app/CommonWidgets/text_style.dart';
+import 'package:organizer_app/Model/user_model.dart';
 import 'package:organizer_app/Provider/event_provider.dart';
 import 'package:organizer_app/Provider/image_picker_provider.dart';
+import 'package:organizer_app/Provider/user_data_provider.dart';
 import 'package:organizer_app/Screens/CreateEvent/HelperWidget/curved_text_field.dart';
 import 'package:organizer_app/Screens/CreateEvent/HelperWidget/dropdown_menu.dart';
+import 'package:organizer_app/Utils/app_message.dart';
 import 'package:organizer_app/Utils/const_color.dart';
 import 'package:organizer_app/Utils/loader.dart';
 import 'package:organizer_app/Utils/scaffold_messenger.dart';
@@ -57,11 +61,47 @@ class _CreateEventState extends State<CreateEvent> {
   ];
 
   List<Map<String, TextEditingController>> subEventControllers = [];
+  late Position position;
 
   @override
   void initState() {
     super.initState();
-    // _addSubEvent();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getCurrentLocation();
+      Provider.of<ImagePickerProvider>(context, listen: false).clearImages();
+    });
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      AppMessage.showWarning(context, "Location services are disabled.");
+
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        AppMessage.showError(context, "Location permissions are denied.");
+
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      AppMessage.showError(context,
+          "Location permissions are permanently denied. Enable them from settings.");
+
+      return;
+    }
+
+    position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
   }
 
   void _addSubEvent() {
@@ -127,7 +167,7 @@ class _CreateEventState extends State<CreateEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: tertiaryColor,
+      // backgroundColor: tertiaryColor,
       appBar: AppBar(
         backgroundColor: primaryColor,
         title: const Center(
@@ -140,7 +180,7 @@ class _CreateEventState extends State<CreateEvent> {
         builder: (context, imagePickerProvider, child) {
           return SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -155,7 +195,7 @@ class _CreateEventState extends State<CreateEvent> {
                         _addSubEvent();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF46BCC3),
+                        backgroundColor: btnColor,
                         minimumSize: Size(
                             MediaQuery.sizeOf(context).width * 0.4,
                             MediaQuery.sizeOf(context).height * 0.07),
@@ -164,7 +204,7 @@ class _CreateEventState extends State<CreateEvent> {
                         ),
                       ),
                       child: const Text(
-                        'Add Sub-event ',
+                        'Add events',
                         style: TextStyle(
                           color: Colors.white,
                         ),
@@ -188,7 +228,7 @@ class _CreateEventState extends State<CreateEvent> {
         borderRadius: BorderRadius.circular(16),
       ),
       margin: const EdgeInsets.symmetric(vertical: 8),
-      elevation: 4,
+      elevation: 1,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         child: Column(
@@ -395,8 +435,8 @@ class _CreateEventState extends State<CreateEvent> {
             ),
             const SizedBox(height: 16),
             _buildRegistrationPeriod(),
-            const SizedBox(height: 16),
-            _buildEventLocation(),
+            // const SizedBox(height: 16),
+            // _buildEventLocation(),
             const SizedBox(height: 16),
             _buildImagePicker(imagePickerProvider),
           ],
@@ -580,7 +620,7 @@ class _CreateEventState extends State<CreateEvent> {
     final screenWidth = mediaQuery.size.width;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Text(
-        'Sub-events',
+        'More events',
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
       const SizedBox(height: 8),
@@ -591,8 +631,8 @@ class _CreateEventState extends State<CreateEvent> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              elevation: 4,
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              elevation: 1,
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 40),
@@ -663,71 +703,71 @@ class _CreateEventState extends State<CreateEvent> {
                       readOnly: true,
                       onTap: () => _selectTime(context, index, 'end_time'),
                     ),
-                    CurvedTextField(
-                        validator: (p0) {
-                          if (p0!.isEmpty) {
-                            return 'Please host name';
-                          }
-                          return null;
-                        },
-                        controller: subEventControllers[index]['host_name']!,
-                        hint: 'Host Name'),
-                    CurvedTextField(
-                        controller: subEventControllers[index]['country_code']!,
-                        keyboardType: TextInputType.number,
-                        hint: 'Country Code'),
-                    CurvedTextField(
-                        validator: (p0) {
-                          if (p0!.isEmpty) {
-                            return 'Please enter mobile number';
-                          }
-                          return null;
-                        },
-                        controller: subEventControllers[index]['host_mobile']!,
-                        keyboardType: TextInputType.number,
-                        hint: 'Host Mobile'),
-                    TextFormField(
-                      controller: subEventControllers[index]['host_email']!,
-                      cursorColor: Colors.black,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your email';
-                        } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-                            .hasMatch(value)) {
-                          return 'Please enter a valid email address';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelText: 'Host Email',
-                        labelStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: screenWidth * 0.04,
-                          fontFamily: "verdana_regular",
-                          fontWeight: FontWeight.w400,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Colors.black),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: Colors.red, width: 1.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide:
-                              const BorderSide(color: Colors.black, width: 1.0),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide:
-                              const BorderSide(color: Colors.red, width: 1.0),
-                        ),
-                      ),
-                    ),
+                    // CurvedTextField(
+                    //     validator: (p0) {
+                    //       if (p0!.isEmpty) {
+                    //         return 'Please host name';
+                    //       }
+                    //       return null;
+                    //     },
+                    //     controller: subEventControllers[index]['host_name']!,
+                    //     hint: 'Host Name'),
+                    // CurvedTextField(
+                    //     controller: subEventControllers[index]['country_code']!,
+                    //     keyboardType: TextInputType.number,
+                    //     hint: 'Country Code'),
+                    // CurvedTextField(
+                    //     validator: (p0) {
+                    //       if (p0!.isEmpty) {
+                    //         return 'Please enter mobile number';
+                    //       }
+                    //       return null;
+                    //     },
+                    //     controller: subEventControllers[index]['host_mobile']!,
+                    //     keyboardType: TextInputType.number,
+                    //     hint: 'Host Mobile'),
+                    // TextFormField(
+                    //   controller: subEventControllers[index]['host_email']!,
+                    //   cursorColor: Colors.black,
+                    //   validator: (value) {
+                    //     if (value == null || value.isEmpty) {
+                    //       return 'Please enter your email';
+                    //     } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                    //         .hasMatch(value)) {
+                    //       return 'Please enter a valid email address';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   keyboardType: TextInputType.emailAddress,
+                    //   decoration: InputDecoration(
+                    //     labelText: 'Host Email',
+                    //     labelStyle: TextStyle(
+                    //       color: Colors.black,
+                    //       fontSize: screenWidth * 0.04,
+                    //       fontFamily: "verdana_regular",
+                    //       fontWeight: FontWeight.w400,
+                    //     ),
+                    //     border: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       borderSide: const BorderSide(color: Colors.black),
+                    //     ),
+                    //     errorBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       borderSide:
+                    //           const BorderSide(color: Colors.red, width: 1.0),
+                    //     ),
+                    //     focusedBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(15),
+                    //       borderSide:
+                    //           const BorderSide(color: Colors.black, width: 1.0),
+                    //     ),
+                    //     focusedErrorBorder: OutlineInputBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       borderSide:
+                    //           const BorderSide(color: Colors.red, width: 1.0),
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(height: 15),
                     CustomDropDownMenu(
                         validator: (p0) {
@@ -913,9 +953,7 @@ class _CreateEventState extends State<CreateEvent> {
                     icon: const Icon(Icons.close_rounded,
                         size: 25, color: Colors.red),
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("sub event removed")),
-                      );
+                      AppMessage.showWarning(context, "sub event removed");
                       setState(() {
                         if (subEventControllers.isNotEmpty) {
                           subEventControllers.removeAt(index);
@@ -942,7 +980,7 @@ class _CreateEventState extends State<CreateEvent> {
     return Center(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF46BCC3),
+          backgroundColor: btnColor,
           minimumSize: Size(MediaQuery.of(context).size.width,
               MediaQuery.of(context).size.height * 0.07),
           shape: RoundedRectangleBorder(
@@ -950,11 +988,16 @@ class _CreateEventState extends State<CreateEvent> {
           ),
         ),
         onPressed: () async {
-          if (!(_formKey.currentState?.validate() ?? false)) return;
+          FocusScope.of(context).unfocus();
+          await _getCurrentLocation();
+          if (!(_formKey.currentState?.validate() ?? false)) {
+            AppMessage.showWarning(context, "Enter all the fields");
+            return;
+          }
 
           if (subEventControllers.isEmpty) {
-            showCustomSnackBar(context, 'Minimum one subevent is mandatary',
-                isError: true);
+            AppMessage.showWarning(
+                context, 'Minimum one subevent is mandatary');
             return;
           }
 
@@ -969,22 +1012,36 @@ class _CreateEventState extends State<CreateEvent> {
             final eventProvider = context.read<EventProvider>();
 
             if (imagePickerProvider.mainEventImage == null) {
-              _showSnackBar(context, "Please select an image.");
+              AppMessage.showWarning(context, "Please select an image.");
               return;
             }
 
             final mainEventData = _buildMainEventData();
             final subEventsData = _buildSubEventsData();
-            final message = await eventProvider.submitEvent(
+
+            Map<String, dynamic> response = await eventProvider.submitEvent(
               imagePickerProvider.mainEventImage!,
               imagePickerProvider.mainEventCoverImages,
               imagePickerProvider.subEventCoverImages,
               mainEventData,
               subEventsData,
             );
-            _handleSubmissionResult(context, message, imagePickerProvider);
+
+            if (response["status"]) {
+              AppMessage.showSuccess(context, response["message"]);
+
+              imagePickerProvider.clearImages();
+              widget.pageController.jumpToPage(3);
+            } else {
+              AppMessage.showError(context, response["message"]);
+            }
           } catch (e) {
-            _showSnackBar(context, "Please try again.");
+            Navigator.of(context).pop();
+            print(e);
+            AppMessage.showError(
+                context, "Something went wrong. Please try again!.");
+          } finally {
+            FocusScope.of(context).requestFocus(FocusNode());
           }
         },
         child: const Text(
@@ -1007,12 +1064,14 @@ class _CreateEventState extends State<CreateEvent> {
       'tags': getSelectedTags(),
       'regStartDate': regStartDateController.text,
       'regEndDate': regEndDateController.text,
-      'latitude': latitudeController.text,
-      'longitude': longitudeController.text,
+      'latitude': position.latitude,
+      'longitude': position.longitude,
     };
   }
 
   List<Map<String, dynamic>> _buildSubEventsData() {
+    UserModel userData =
+        Provider.of<UserDataProvider>(context, listen: false).userData[0];
     return subEventControllers.map((subEvent) {
       return {
         'name': subEvent['name']!.text,
@@ -1021,40 +1080,14 @@ class _CreateEventState extends State<CreateEvent> {
         'start_date': subEvent['start_date']!.text,
         'start_time': subEvent['start_time']!.text,
         'end_time': subEvent['end_time']!.text,
-        'host_name': subEvent['host_name']!.text,
-        'country_code': subEvent['country_code']!.text,
-        'host_mobile': subEvent['host_mobile']!.text,
-        'host_email': subEvent['host_email']!.text,
+        'host_name': userData.fullName,
+        'country_code': userData.countryCode,
+        'host_mobile': userData.mobile,
+        'host_email': userData.email,
         'ticket_type': subEvent['ticket_type']!.text,
         'ticket_price': subEvent['ticket_price']!.text,
         'ticket_qty': subEvent['ticket_qty']!.text,
       };
     }).toList();
-  }
-
-  void _handleSubmissionResult(BuildContext context, String message,
-      ImagePickerProvider imagePickerProvider) {
-    const List<String> errorMessages = [
-      "Upload required files",
-      "Enter all fields",
-      "Enter all fields",
-      "Internal server error",
-    ];
-
-    FocusScope.of(context).unfocus();
-
-    if (message == "Events and sub events uploaded") {
-      showCustomSnackBar(context, message);
-      imagePickerProvider.clearImages();
-      widget.pageController.jumpToPage(3);
-    } else if (errorMessages.contains(message)) {
-      showCustomSnackBar(context, message);
-    }
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    if (context.mounted) {
-      showCustomSnackBar(context, message);
-    }
   }
 }

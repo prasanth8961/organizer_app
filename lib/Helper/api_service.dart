@@ -1,5 +1,5 @@
-String get baseUrl => 'https://event-backend-0000.onrender.com/api/v1/';
-String get imageBaseUrl => 'https://event-backend-0000.onrender.com/';
+String get baseUrl => 'https://event-backend-11.onrender.com/api/v1/';
+String get imageBaseUrl => 'https://event-backend-11.onrender.com/';
 
 class Config {
   static const String loginUser = 'organizer/login';

@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:organizer_app/Helper/api_service.dart';
-import 'package:organizer_app/PageRouter/page_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -23,8 +21,16 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> signUp(Map<String, dynamic> formData, List<dynamic> imagePaths,
-      String? fileData) async {
+  Future<void> _storeAccessToken(String accessToken) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('accessToken', accessToken);
+  }
+
+  Future<Map<String , dynamic>> signUp({
+  required
+ Map<String, dynamic> formData, required
+  List<dynamic> imagePaths,
+      String? fileData}) async {
     isLoading = true;
     errorMessage = null;
 
@@ -49,17 +55,24 @@ class AuthProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         final responseJson = jsonDecode(responseString);
-        String accessToken = responseJson['accessToken'];
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('accessToken', accessToken);
-        Get.offAllNamed(PageRoutes.mainScreen);
-        return 'sign up success';
+        await _storeAccessToken(responseJson['accessToken']);
+        return {
+          "status": responseJson["status"],
+          "message": responseJson["message"],
+        };
       } else {
-        return 'Failed to sign up';
+        final responseJson = jsonDecode(responseString);
+        return {
+          "status": responseJson["status"],
+          "message": responseJson["message"],
+        };
       }
     } catch (e) {
-      return "internal server error";
-    } finally {
+      return {
+        "status": 501,
+        "message": "Something went wrong. Please try again!",
+      };
+      } finally {
       isLoading = false;
     }
   }

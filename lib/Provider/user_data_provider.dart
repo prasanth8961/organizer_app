@@ -15,7 +15,6 @@ class UserDataProvider extends ChangeNotifier {
     String? token = prefs.getString("accessToken");
 
     if (token == null) {
-      print('No access token found');
       _userData = [];
       notifyListeners();
       return;

@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:organizer_app/PageRouter/page_routes.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -8,8 +9,8 @@ import 'package:organizer_app/Provider/image_picker_provider.dart';
 import 'package:organizer_app/Screens/Auth/HelperWidget/custom_text_field.dart';
 import 'package:organizer_app/Screens/Auth/HelperWidget/document_picker.dart';
 import 'package:organizer_app/Screens/Auth/HelperWidget/image_picker.dart';
+import 'package:organizer_app/Utils/app_message.dart';
 import 'package:organizer_app/Utils/const_color.dart';
-import 'package:organizer_app/Utils/scaffold_messenger.dart';
 import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -26,8 +27,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final _collegeNameController = TextEditingController();
   final _collegeCodeController = TextEditingController();
   final _locationController = TextEditingController();
-  final _latitudeController = TextEditingController();
-  final _longitudeController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _showPassword = true;
@@ -48,6 +47,49 @@ class _SignupScreenState extends State<SignupScreen> {
 
   String phoneNumber = '';
   String cCode = '';
+  Position? position;
+
+  @override
+  void initState() {
+    _getCurrentLocation();
+    super.initState();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+
+        AppMessage.showWarning(context, "Location services are disabled.");
+
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+
+          AppMessage.showError(context, "Location permissions are denied.");
+
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+
+        AppMessage.showError(context,
+            "Location permissions are permanently denied. Enable them from settings.");
+
+
+      return;
+    }
+
+    position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +100,9 @@ class _SignupScreenState extends State<SignupScreen> {
     final selectedFile = filePickerProvider.selectedFile;
 
     void handleSubmit(dynamic filePickerProvider) async {
+      FocusScope.of(context).requestFocus(FocusNode());
       if (_formKey.currentState!.validate()) {
+        _getCurrentLocation();
         final random = Random();
         final orgID = 100000 + random.nextInt(900000);
 
@@ -74,33 +118,34 @@ class _SignupScreenState extends State<SignupScreen> {
           "college_code": _collegeCodeController.text,
           "college_name": _collegeNameController.text,
           "location": _locationController.text,
-          "longitude": _longitudeController.text,
-          "latitude": _latitudeController.text,
+          "longitude": position!.longitude,
+          "latitude": position!.latitude,
         };
 
         List<dynamic> imagePaths =
             filePickerProvider.images.map((e) => e?.path).toList();
         final fileData = filePickerProvider.selectedFile?.path;
-
-        final message =
-            await authProvider.signUp(formData, imagePaths, fileData);
-
-        if (context.mounted) {
-          showCustomSnackBar(context, message);
-        }
+       Map<String, dynamic> response = await authProvider.signUp(formData:  formData, imagePaths:  imagePaths, fileData:  fileData);
+       imagePaths.clear();
+       if(response["status"]){
+         AppMessage.showSuccess(context, response["message"]);
+         Get.offAllNamed(PageRoutes.mainScreen);
+       }else{
+         AppMessage.showError(context, response["message"]);
+       }
       }
     }
-
+    final isLoading = context.watch<AuthProvider>().isLoading;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: screenHeight * 0.08),
               Text(
-                "Sign Up!",
+                "Create new account",
                 style: TextStyle(
                   color: primaryColor,
                   fontSize: screenWidth * 0.1,
@@ -109,7 +154,7 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               SizedBox(height: screenHeight * 0.02),
               Text(
-                "Welcome Aboard!",
+                "Welcome Organizer",
                 style: TextStyle(
                   fontSize: screenWidth * 0.06,
                   fontWeight: FontWeight.w500,
@@ -124,15 +169,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.02, vertical: 15),
                   decoration: BoxDecoration(
-                    color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 10,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
                   ),
                   child: Column(
                     children: [
@@ -215,31 +252,41 @@ class _SignupScreenState extends State<SignupScreen> {
                         },
                       ),
                       SizedBox(height: screenHeight * 0.02),
-                      CustomTextFieldWidget(
-                          controller: _latitudeController,
-                          label: 'Latitude',
-                          screenWidth: screenWidth,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter latitude';
-                            }
-                            return null;
-                          }),
-                      SizedBox(height: screenHeight * 0.02),
-                      CustomTextFieldWidget(
-                          controller: _longitudeController,
-                          label: 'Longitude',
-                          screenWidth: screenWidth,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter longitude';
-                            }
-                            return null;
-                          }),
+                    // Container(
+                    //   height: screenHeight * 0.07, // Adjust the height as per requirement
+                    //   decoration: BoxDecoration(
+                    //     border: Border.all( color:position == null ? Colors.grey : Colors.green ), // Outline border color
+                    //     borderRadius: BorderRadius.circular(10), // Rounded corners
+                    //   ),
+                    //   child: InkWell(
+                    //     onTap: _getCurrentLocation, // Call the method when the container is pressed
+                    //     child: Padding(
+                    //       padding: EdgeInsets.symmetric(horizontal: 16), // Padding inside the container
+                    //       child: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //         children: [
+                    //           Text(
+                    //             position != null
+                    //                 ? "Location: ${position!.latitude}, ${position!.longitude}"
+                    //                 : 'Press the button to get location.',
+                    //             style: TextStyle(
+                    //               fontSize: 16,
+                    //               fontWeight: FontWeight.w500,
+                    //             ),
+                    //           ),
+                    //           IconButton(
+                    //             icon: const Icon(Icons.my_location_sharp, color: Colors.grey),
+                    //             onPressed: _getCurrentLocation, // The method is called when the icon is pressed
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                       SizedBox(height: screenHeight * 0.02),
                       CustomTextFieldWidget(
                           controller: _locationController,
-                          label: 'Location',
+                          label: 'City',
                           screenWidth: screenWidth,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -247,6 +294,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             }
                             return null;
                           }),
+
                       SizedBox(height: screenHeight * 0.02),
                       TextFormField(
                         controller: _passwordController,
@@ -358,20 +406,44 @@ class _SignupScreenState extends State<SignupScreen> {
                       SizedBox(height: screenHeight * 0.01),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF46BCC3),
+                          backgroundColor: isLoading
+                              ? Colors.grey.withOpacity(0.5)
+                              : const Color(0xFF46BCC3),
                           minimumSize: const Size(double.infinity, 50),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        onPressed: () => handleSubmit(filePickerProvider),
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(
-                              fontSize: screenWidth * 0.05,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500),
-                        ),
+                        onPressed: isLoading
+                            ? null
+                            : () => handleSubmit(filePickerProvider),
+                        child: isLoading
+                            ? const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 24.0,
+                                    width: 24.0,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2.0,
+                                    ),
+                                  ),
+                                  SizedBox(width: 12),
+                                  Text(
+                                    'Loading...',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ],
+                              )
+                            : const Text(
+                                "Register",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                       ),
                     ],
                   ),

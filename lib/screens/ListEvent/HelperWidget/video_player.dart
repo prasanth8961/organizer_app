@@ -75,12 +75,13 @@ class _YoutubeVideoPlayerWidgetState extends State<YoutubeVideoPlayerWidget> {
               ),
               leading: BackButton(
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            EventDetailsScreen(eventData: widget.eventData)),
-                  ); // Navigate back
+                  Navigator.pop(context);
+                  // Navigator.pushReplacement(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //       builder: (context) =>
+                  //           EventDetailsScreen(eventData: widget.eventData)),
+                  // ); // Navigate back
                 },
                 color: Colors.black,
               ),

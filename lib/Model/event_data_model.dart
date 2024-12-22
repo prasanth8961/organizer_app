@@ -1,3 +1,10 @@
+import 'dart:convert';
+
+EventDataModel eventDataModelFromJson(String str) =>
+    EventDataModel.fromJson(json.decode(str));
+
+String eventDataModelToJson(EventDataModel data) => json.encode(data.toJson());
+
 class EventDataModel {
   final MainEvent mainEvent;
   final List<SubEvent> subEvents;
@@ -28,13 +35,13 @@ class MainEvent {
   final DateTime regStart;
   final DateTime regEnd;
   final String category;
-  final List<String> tags;
+  final String tags;
   final String audienceType;
   final int multiTickets;
   final String currency;
-  final String status;
   final List<String> mainImg;
   final List<String> coverImg;
+  final String status;
 
   MainEvent({
     required this.mainEventId,
@@ -49,28 +56,27 @@ class MainEvent {
     required this.audienceType,
     required this.multiTickets,
     required this.currency,
-    required this.status,
     required this.mainImg,
     required this.coverImg,
+    required this.status,
   });
 
   factory MainEvent.fromJson(Map<String, dynamic> json) => MainEvent(
-        mainEventId: json["main_event_id"],
-        name: json["name"],
-        location: json["location"],
-        orgId: json["org_id"],
-        description: json["description"],
-        regStart: DateTime.parse(json["reg_start"]),
-        regEnd: DateTime.parse(json["reg_end"]),
-        category: json["category"],
-        tags: List<String>.from(json["tags"].map((x) => x)),
-        audienceType: json["audience_type"],
-        multiTickets: json["multi_tickets"],
-        currency: json["currency"],
-        status: json["status"] ?? 'pending',
-        mainImg: List<String>.from(json["main_img"].map((x) => x)),
-        coverImg: List<String>.from(json["cover_img"].map((x) => x)),
-      );
+      mainEventId: json["main_event_id"],
+      name: json["name"],
+      location: json["location"],
+      orgId: json["org_id"],
+      description: json["description"],
+      regStart: DateTime.parse(json["reg_start"]),
+      regEnd: DateTime.parse(json["reg_end"]),
+      category: json["category"],
+      tags: json["tags"],
+      audienceType: json["audience_type"],
+      multiTickets: json["multi_tickets"],
+      currency: json["currency"],
+      mainImg: List<String>.from(json["main_img"].map((x) => x)),
+      coverImg: List<String>.from(json["cover_img"].map((x) => x)),
+      status: "pending");
 
   Map<String, dynamic> toJson() => {
         "main_event_id": mainEventId,
@@ -81,11 +87,10 @@ class MainEvent {
         "reg_start": regStart.toIso8601String(),
         "reg_end": regEnd.toIso8601String(),
         "category": category,
-        "tags": List<dynamic>.from(tags.map((x) => x)),
+        "tags": tags,
         "audience_type": audienceType,
         "multi_tickets": multiTickets,
         "currency": currency,
-        "status": "pending",
         "main_img": List<dynamic>.from(mainImg.map((x) => x)),
         "cover_img": List<dynamic>.from(coverImg.map((x) => x)),
       };
