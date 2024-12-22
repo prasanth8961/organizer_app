@@ -1,5 +1,5 @@
 
-## $${\color{aqua}ORGANIZER - APP}$$
+## ORGANIZER APP
 
 ### Overview 
   - This app is a part of the **Event management system** . Organizer app plays an important role in event management software. Which helps to create and manage events.
@@ -23,39 +23,32 @@
 - **Provider**: Simplifies state management across the application.
 
 ---
+## APP OUTPUT SCREENS
 
-## App View
-
-### Home Screen and Search Screen:
-<div style="display: flex; justify-content: space-between; padding-top:10px">
-  <img src="assets/img_samples/home_screen.jpg" alt="Home Screen" width="48%" />
-  <img src="assets/img_samples/audio_visualization.jpg" alt="search screen" width="48%" />
-</div>
-
-### **Event creation and event status Screen**:
-<div style="display: flex; justify-content: space-between; padding-top:10px">
-  <img src="assets/img_samples/home_screen.jpg" alt="event creation img" width="48%" />
-  <img src="assets/img_samples/audio_visualization.jpg" alt="event search after" width="48%" />
-</div>
-
-### **Event Status [rejected and aproved] Screen**:
-<div style="display: flex; justify-content: space-between; padding-top:10px">
-  <img src="assets/img_samples/home_screen.jpg" alt="event creation img" width="48%" />
-  <img src="assets/img_samples/audio_visualization.jpg" alt="event search after" width="48%" />
-</div>
-
-### **Event detail and event video player Screen**:
-<div style="display: flex; justify-content: space-between; padding-top:10px">
-  <img src="assets/img_samples/home_screen.jpg" alt="event creation img" width="48%" />
-  <img src="assets/img_samples/audio_visualization.jpg" alt="event search after" width="48%" />
-</div>
-
-### Settings Menu & User profile:
-<div style="display: flex; justify-content: space-between;">
-  <img src="assets/img_samples/settings_menu.jpg" alt="Settings Menu" width="48%" />
-  <img src="assets/img_samples/data_logging.jpg" alt="Data Logging" width="48%" />
-</div>
-
+<table>
+  <tr>
+    <td><img src="assets/organizer-app-img/home-shimmer.jpg" alt="Sample 1" width="150"></td>
+    <td><img src="assets/organizer-app-img/home.jpg" alt="Sample 2" width="150"></td>
+    <td><img src="assets/organizer-app-img/search-before.jpg" alt="Sample 3" width="150"></td>
+    <td><img src="assets/organizer-app-img/search-after.jpg" alt="Sample 4" width="150"></td>
+  </tr>
+  <tr>
+    <td><img src="assets/organizer-app-img/event-create.jpg" alt="Sample 5" width="150"></td>
+    <td><img src="assets/organizer-app-img/start-event-creation.jpg" alt="Sample 6" width="150"></td>
+    <td><img src="assets/organizer-app-img/event-date-pick.jpg" alt="Sample 7" width="150"></td>
+    <td><img src="assets/organizer-app-img/event-img-pick.jpg" alt="Sample 8" width="150"></td>
+  </tr>
+  <tr>
+    <td><img src="assets/organizer-app-img/event-progress.jpg" alt="Sample 9" width="150"></td>
+    <td><img src="assets/organizer-app-img/event-status.jpg" alt="Sample 10" width="150"></td>
+    <td><img src="assets/organizer-app-img/event-detail.jpg" alt="Sample 11" width="150"></td>
+    <td><img src="assets/organizer-app-img/event-detail-2.jpg" alt="Sample 12" width="150"></td>
+  </tr>
+  <tr>
+    <td><img src="assets/organizer-app-img/event-video.jpg" alt="Sample 13" width="150"></td>
+    <td><img src="assets/organizer-app-img/profile.jpg" alt="Sample 14" width="150"></td>
+  </tr>
+</table>
 ---
 
 
